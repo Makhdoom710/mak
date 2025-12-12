@@ -1,0 +1,15 @@
+{
+  // This file is not used in compilation. It is here just for a nice editor experience.
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "launchdarkly": [
+        "./node_modules/launchdarkly-js-client-sdk/dist/ldclient.es.js"
+      ],
+      "@site/*": ["./*"],
+    }
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules"]
+}
