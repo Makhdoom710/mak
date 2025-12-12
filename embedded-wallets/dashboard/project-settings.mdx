@@ -1,0 +1,260 @@
+---
+title: Project Settings
+sidebar_label: Project Settings
+image: 'img/metamaskog.jpg'
+description: 'Configure project settings in Web3Auth Dashboard | Embedded Wallets'
+---
+
+import ProjectSettingsGeneral from '@site/static/img/embedded-wallets/w3a-dashboard/project-settings-general.png'
+
+The **Project Settings** section of the Web3Auth Dashboard allows developers to manage core configuration options for each project. These settings determine how the project integrates with the Web3Auth SDK and how it behaves across different environments.
+
+<div style={{ flexBasis: '300px', flexGrow: '1', textAlign: 'center' }}>
+  <img
+    src={ProjectSettingsGeneral}
+    style={{ alignSelf: 'center', maxWidth: '100%' }}
+    alt="Project Settings General"
+  />
+</div>
+
+## Project Information
+
+### Project Name
+
+This is the name of the project that will be displayed to users during the Web3Auth login flow and in any related email communication. The project name serves as your application's identity in the Web3Auth ecosystem.
+
+**Key Features:**
+
+- **User-Facing Display**: Appears in login modals and authentication flows
+- **Email Communications**: Used in Web3Auth-generated emails to users
+- **Dashboard Identification**: Helps you identify projects in your dashboard
+- **Updateable**: Can be modified at any time after project creation
+
+**Best Practices:**
+
+- Use a clear, recognizable name that matches your application
+- Keep it concise but descriptive
+- Avoid special characters that might cause display issues
+- Consider how it will appear to end users
+
+### Environment
+
+This indicates the Web3Auth environment selected during project creation. The environment determines the infrastructure tier and security level of your project.
+
+**Available Environments:**
+
+- **Sapphire Devnet**: Development environment for testing and integration
+- **Sapphire Mainnet**: Production environment for live applications
+
+**Important Notes:**
+
+- Environments are globally distributed and highly scalable
+- **Cannot be modified** after project creation
+- Each environment has separate user bases and data isolation
+- Production applications should use Sapphire Mainnet
+
+### Project Platform
+
+Developers can select from a wide range of platform options depending on the nature of their application. This setting helps optimize the SDK behavior and available features for your specific platform.
+
+**Platform Options:**
+
+- **Web**: Browser-based applications (React, Vue, JavaScript)
+- **Mobile**: Native mobile applications (Android, iOS, React Native, Flutter)
+- **Gaming**: Game development platforms (Unity, Unreal Engine)
+
+**Platform-Specific Features:**
+
+- Different SDK packages and integration methods
+- Platform-optimized authentication flows
+- Tailored documentation and examples
+- Specific security considerations
+
+## Authentication Credentials
+
+### Client ID
+
+A unique identifier automatically generated for each project. This is the primary credential used to authenticate your application with Web3Auth services.
+
+**Characteristics:**
+
+- **Publicly Safe**: Can be exposed in client-side code
+- **Required for Integration**: Essential for all SDK implementations
+- **Unique per Project**: Each project receives a distinct Client ID
+- **Immutable**: Cannot be changed after generation
+
+**Usage Example:**
+
+```javascript
+import { Web3Auth } from '@web3auth/modal'
+
+const web3auth = new Web3Auth({
+  clientId: 'YOUR_CLIENT_ID_HERE', // Safe to expose publicly
+  web3AuthNetwork: 'sapphire_mainnet',
+})
+```
+
+### Client Secret
+
+A confidential key used for authenticating server-side API requests and advanced integrations. This credential provides elevated access to Web3Auth services.
+
+**Security Requirements:**
+
+- **Never expose** in frontend code or client-side environments
+- **Server-side only**: Use exclusively in backend services
+- **Secure storage**: Store in environment variables or secure vaults
+- **Rotation capability**: Can be regenerated if compromised
+
+**Use Cases:**
+
+- Server-side user verification
+- Administrative operations
+- Webhook signature verification
+- Advanced API integrations
+
+:::danger Security Warning
+
+The Client Secret must never be exposed in client-side code, mobile applications, or any publicly accessible environment. Exposure could compromise your project's security.
+
+:::
+
+## Token Verification
+
+### JWKS Endpoint
+
+A public endpoint that exposes the JSON Web Key Set (JWKS) used by Web3Auth to sign JWTs. This endpoint enables you to verify the authenticity of identity tokens issued by Web3Auth.
+
+**Endpoint Format:**
+
+```
+https://api.web3auth.io/jwks?project_id=YOUR_PROJECT_ID
+```
+
+**Benefits:**
+
+- **Dynamic Key Rotation**: Automatically receives updated signing keys
+- **Industry Standard**: JWKS is a widely adopted standard for JWT verification
+- **High Availability**: Backed by Web3Auth's global infrastructure
+- **Real-time Updates**: Always provides current verification keys
+
+**Implementation Example:**
+
+```javascript
+import jwt from 'jsonwebtoken'
+import jwksClient from 'jwks-rsa'
+
+const client = jwksClient({
+  jwksUri: 'https://api.web3auth.io/jwks?project_id=YOUR_PROJECT_ID',
+})
+
+function getKey(header, callback) {
+  client.getSigningKey(header.kid, (err, key) => {
+    const signingKey = key.publicKey || key.rsaPublicKey
+    callback(null, signingKey)
+  })
+}
+
+// Verify token
+jwt.verify(token, getKey, options, (err, decoded) => {
+  if (err) {
+    console.error('Token verification failed:', err)
+  } else {
+    console.log('Token verified:', decoded)
+  }
+})
+```
+
+### Project Verification Key
+
+An alternative to using the JWKS endpoint, this static key allows for token verification without depending on external JWKS URL calls.
+
+**Advantages:**
+
+- **Offline Verification**: No external API calls required
+- **Reduced Latency**: Faster token verification process
+- **Network Independence**: Works in environments with limited connectivity
+- **Simplified Implementation**: Single key verification logic
+
+**When to Use:**
+
+- Applications with strict latency requirements
+- Environments with limited internet access
+- Simplified verification workflows
+- Backup verification method
+
+**Implementation Example:**
+
+```javascript
+import jwt from 'jsonwebtoken'
+
+const PROJECT_VERIFICATION_KEY = `-----BEGIN PUBLIC KEY-----
+YOUR_PROJECT_VERIFICATION_KEY_HERE
+-----END PUBLIC KEY-----`
+
+// Verify token with static key
+jwt.verify(token, PROJECT_VERIFICATION_KEY, { algorithms: ['RS256'] }, (err, decoded) => {
+  if (err) {
+    console.error('Token verification failed:', err)
+  } else {
+    console.log('Token verified:', decoded)
+  }
+})
+```
+
+## Project Management
+
+### Archive Project
+
+The Archive Project feature allows you to deactivate a project while preserving its configuration and data. This is useful for temporarily disabling projects or maintaining historical records.
+
+**Archive Effects:**
+
+- **Read-Only Mode**: Project becomes non-functional but viewable
+- **Authentication Disabled**: Users cannot log in to archived projects
+- **Data Preservation**: All configuration and user data is retained
+- **Reversible**: Projects can be restored from archived state
+
+**When to Archive:**
+
+- Temporary project suspension
+- End-of-life applications
+- Testing environment cleanup
+- Compliance requirements
+
+**Restoration Process:**
+
+- Archived projects can be restored through the dashboard
+- All settings and configurations are preserved
+- User data and authentication flows resume normally
+- No data loss occurs during archive/restore cycles
+
+:::info Archive vs Delete
+
+Archiving preserves all project data and allows for restoration. If you need to permanently remove a project, contact Web3Auth support for assistance with proper data deletion procedures.
+
+:::
+
+## Next Steps
+
+For comprehensive project configuration, explore these related settings:
+
+- **[Whitelist Settings](../whitelist)** - Configure domain and URL authorization for enhanced security
+- **[Advanced Project Settings](../advanced/session-management)** - Access session management, key export, user data, and testing configurations
+
+### Quick Start Guide
+
+**Essential Configuration Steps:**
+
+1. Set up your project name and verify environment
+2. Obtain your Client ID for SDK integration
+3. Configure domain whitelisting for security
+4. Set up token verification method
+5. Review advanced settings as needed
+
+### Production Deployment Checklist
+
+- ✅ All production domains whitelisted
+- ✅ Token verification configured
+- ✅ Advanced settings reviewed
+- ✅ Test accounts disabled
+- ✅ Security settings verified
