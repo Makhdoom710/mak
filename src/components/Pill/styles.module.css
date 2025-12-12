@@ -1,0 +1,29 @@
+.pill {
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.pill--green {
+  color: var(--ifm-color-success-contrast-foreground);
+  background: var(--ifm-color-success-contrast-background);
+}
+
+.pill--red {
+  color: var(--ifm-color-warning-contrast-foreground);
+  background: var(--ifm-color-warning-contrast-background);
+}
+
+.pill--blue {
+  color: var(--ifm-color-info-contrast-foreground);
+  background: var(--ifm-color-info-contrast-background);
+}
+
+.pill--orange {
+  color: var(--ifm-color-danger-contrast-foreground);
+  background: var(--ifm-color-danger-contrast-background);
+}
+
+.pill--grey {
+  color: var(--ifm-color-secondary-contrast-foreground);
+  background: var(--ifm-color-secondary-contrast-background);
+}
