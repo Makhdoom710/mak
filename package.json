@@ -1,0 +1,97 @@
+{
+  "name": "metamask-docs",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "start-with-app": "docusaurus start -p 3003",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "allow-scripts": "yarn allow-scripts",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "typecheck": "tsc",
+    "typecheck-staged": "tsc-files --noEmit",
+    "lint": "npm run lint:js && npm run lint:style",
+    "lint:js": "eslint . --ext js,jsx,ts,tsx --max-warnings=5",
+    "lint:style": "stylelint \"**/*.css\" --fix",
+    "lint:fix": "npm run lint:js -- --fix",
+    "format": "prettier --write '{blog,docs,src,static}/**/*.{md,mdx,ts,js,tsx,jsx,json}'"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js,jsx,tsx}": "npm run lint:fix",
+    "**/*.{ts,tsx}": "npm run typecheck-staged",
+    "**/*.css": "npm run lint:style",
+    "**/*.{md,mdx,ts,js,tsx,jsx,json}": "npm run format"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.0.1",
+    "@docusaurus/plugin-client-redirects": "^3.0.1",
+    "@docusaurus/plugin-google-gtag": "^3.0.1",
+    "@docusaurus/plugin-google-tag-manager": "^3.0.1",
+    "@docusaurus/preset-classic": "^3.0.1",
+    "@docusaurus/theme-common": "^3.0.1",
+    "@easyops-cn/docusaurus-search-local": "^0.38.1",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^1.2.1",
+    "docusaurus-plugin-segment": "^1.0.4",
+    "dotenv": "^16.3.1",
+    "prism-react-renderer": "^2.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropdown-select": "^4.11.0",
+    "redocusaurus": "^2.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.2.0",
+    "@commitlint/config-conventional": "^18.1.0",
+    "@docusaurus/eslint-plugin": "^3.0.0",
+    "@docusaurus/module-type-aliases": "^3.0.0",
+    "@docusaurus/tsconfig": "^3.0.0",
+    "@docusaurus/types": "^3.0.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^10.0.4",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.7",
+    "@semantic-release/npm": "^10.0.2",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "@typescript-eslint/parser": "^6.13.1",
+    "commitizen": "^4.3.0",
+    "cspell": "^6.31.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "semantic-release": "^21.0.0",
+    "stylelint": "^15.0.0 ",
+    "stylelint-config-standard": "^34.0.0",
+    "tsc-files": "^1.1.4",
+    "typescript": "^5.2.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=16.14"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
